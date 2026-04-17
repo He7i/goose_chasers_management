@@ -7,6 +7,7 @@ import UsersPage from './pages/UsersPage'
 import GamesPage from './pages/GamesPage'
 import GameDetailPage from './pages/GameDetailPage'
 import PlayersPage from './pages/PlayersPage'
+import BillingPage from './pages/BillingPage'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="games" element={<GamesPage />} />
               <Route path="games/:id" element={<GameDetailPage />} />
               <Route path="players" element={<PlayersPage />} />
+              <Route path="billing" element={<BillingPage />} />
             </Route>
           </Routes>
         </Router>

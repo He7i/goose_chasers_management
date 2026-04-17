@@ -1,12 +1,13 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
-import { LayoutDashboard, Users, Gamepad2, UserCheck, LogOut } from 'lucide-react'
+import { LayoutDashboard, Users, Gamepad2, UserCheck, CreditCard, LogOut } from 'lucide-react'
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/users', label: 'Users', icon: Users },
   { to: '/games', label: 'Games', icon: Gamepad2 },
   { to: '/players', label: 'Players', icon: UserCheck },
+  { to: '/billing', label: 'Billing', icon: CreditCard },
 ]
 
 export default function Layout() {

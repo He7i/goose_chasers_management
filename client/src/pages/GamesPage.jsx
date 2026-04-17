@@ -4,7 +4,7 @@ import { Plus, Trash2, Eye } from 'lucide-react'
 import { getGames, createGame, deleteGame, getUsers } from '../api'
 import Modal from '../components/Modal'
 
-const emptyForm = { title: '', created_by: '' }
+const emptyForm = { title: '', game_type: '', ordered: false, created_by: '' }
 
 export default function GamesPage() {
   const [games, setGames] = useState([])
@@ -121,6 +121,19 @@ export default function GamesPage() {
             />
           </div>
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Game Type *</label>
+            <select
+              required
+              value={form.game_type}
+              onChange={(e) => setForm({ ...form, game_type: e.target.value })}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+            >
+              <option value="">Select a game type…</option>
+              <option value="hunt">Hint Hunt</option>
+              <option value="escape_room">Escape Room</option>
+            </select>
+          </div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Created By (User) *</label>
             <select
               required
@@ -133,6 +146,17 @@ export default function GamesPage() {
                 <option key={u.id} value={u.id}>{u.name || u.email}</option>
               ))}
             </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="ordered"
+              checked={form.ordered}
+              onChange={(e) => setForm({ ...form, ordered: e.target.checked })}
+              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+            />
+            <label htmlFor="ordered" className="text-sm font-medium text-gray-700">Ordered hints</label>
+            <span className="text-xs text-gray-400">(hints must be solved in sequence)</span>
           </div>
           <div className="flex justify-end gap-3 pt-2">
             <button type="button" onClick={() => setModalOpen(false)} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors">Cancel</button>

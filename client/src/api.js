@@ -38,7 +38,15 @@ export const deleteGame = (id) => api.delete(`/games/${id}`)
 
 // ---- Hints ----
 export const getHints = (gameId) => api.get(`/games/${gameId}/hints`).then((r) => r.data)
-export const createHint = (gameId, data) => api.post(`/games/${gameId}/hints`, data).then((r) => r.data)
+export const createHint = (gameId, data) => {
+  if (data instanceof FormData) {
+    return api.post(`/games/${gameId}/hints`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then((r) => r.data)
+  }
+  return api.post(`/games/${gameId}/hints`, data).then((r) => r.data)
+}
+export const getHintImage = (gameId, hintId) => `/api/games/${gameId}/hints/${hintId}/image`
 export const updateHint = (hintId, data) => api.put(`/hints/${hintId}`, data).then((r) => r.data)
 export const deleteHint = (hintId) => api.delete(`/hints/${hintId}`)
 
