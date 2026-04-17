@@ -5,20 +5,37 @@ const router = Router()
 
 // PUT update hint
 router.put('/:id', async (req, res) => {
-  const { question_text, answer, order_index } = req.body
+  const { text_hint, text_solution, order_index } = req.body
+  const client = await pool.connect()
   try {
-    const { rows } = await pool.query(
+    await client.query('BEGIN')
+
+    const { rows } = await client.query(
       `UPDATE hints SET
-        question_text = COALESCE($1, question_text),
-        answer = COALESCE($2, answer),
-        order_index = COALESCE($3, order_index)
-      WHERE id = $4 RETURNING *`,
-      [question_text || null, answer || null, order_index ?? null, req.params.id]
+        text_hint = COALESCE($1, text_hint),
+        order_index = COALESCE($2, order_index)
+      WHERE id = $3 RETURNING *`,
+      [text_hint || null, order_index ?? null, req.params.id]
     )
-    if (rows.length === 0) return res.status(404).json({ error: 'Hint not found' })
+    if (rows.length === 0) {
+      await client.query('ROLLBACK')
+      return res.status(404).json({ error: 'Hint not found' })
+    }
+
+    if (text_solution) {
+      await client.query(
+        `UPDATE solutions SET text_solution = $1 WHERE hint_id = $2`,
+        [text_solution, req.params.id]
+      )
+    }
+
+    await client.query('COMMIT')
     res.json(rows[0])
   } catch (err) {
+    await client.query('ROLLBACK')
     res.status(500).json({ error: err.message })
+  } finally {
+    client.release()
   }
 })
 
