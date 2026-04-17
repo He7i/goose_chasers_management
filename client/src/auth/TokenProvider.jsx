@@ -9,6 +9,7 @@ export default function TokenProvider({ children }) {
     setTokenGetter(() =>
       getAccessTokenSilently({
         authorizationParams: {
+          audience: import.meta.env.VITE_AUTH0_AUDIENCE,
         },
       })
     )

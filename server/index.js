@@ -17,18 +17,15 @@ const PORT = process.env.PORT || 5001
 app.use(cors())
 app.use(express.json())
 
-// Auth0 session middleware
-app.use(authMiddleware)
-
 // Public route (called by Auth0 Action, no JWT needed)
 app.use('/auth', authRouter)
 
-// API routes (protected by session auth)
-app.use('/api/users', usersRouter)
-app.use('/api/games', gamesRouter)
-app.use('/api/hints', hintsRouter)
-app.use('/api/players', playersRouter)
-app.use('/api/stats', statsRouter)
+// Protected API routes (require valid JWT Bearer token)
+app.use('/api/users', authMiddleware, usersRouter)
+app.use('/api/games', authMiddleware, gamesRouter)
+app.use('/api/hints', authMiddleware, hintsRouter)
+app.use('/api/players', authMiddleware, playersRouter)
+app.use('/api/stats', authMiddleware, statsRouter)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`)
